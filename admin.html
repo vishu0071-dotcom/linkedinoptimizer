@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Dashboard — LinkedInOptimizer.net</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#1a1a2e;--accent2:#e8ff47;
+  --bg:#f4f4f0;--card:#fff;--border:#e2e2e2;
+  --text:#111;--muted:#777;--radius:12px;
+  --sidebar:220px;
+  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  --green:#3a6e00;--green-bg:#f0ffd6;
+  --blue:#185fa5;--blue-bg:#e6f1fb;
+  --red:#a32d2d;--red-bg:#fcebeb;
+  --amber:#854f0b;--amber-bg:#faeeda;
+}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:0.3rem}
+.login-logo span{background:var(--accent);color:var(--accent2);padding:2px 7px;border-radius:5px;margin-right:2px}
+.login-box h2{font-family:var(--font-head);font-size:1.5rem;font-weight:800;margin:1.2rem 0 0.4rem}
+.login-box p{color:var(--muted);font-size:0.88rem;margin-bottom:2rem}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#333;border:1.5px solid var(--border);border-radius:10px;padding:0.8rem;font-family:var(--font-body);font-size:0.95rem;font-weight:500;cursor:pointer;transition:background 0.2s;margin-bottom:1rem}
+.btn-google:hover{background:#f7f7f7}
+.btn-google svg{width:20px;height:20px;flex-shrink:0}
+.admin-email-note{font-size:0.78rem;color:var(--muted);background:#f7f7f7;border-radius:8px;padding:0.6rem 1rem;margin-top:0.5rem}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:var(--accent);color:#fff;display:flex;flex-direction:column;padding:1.5rem 0;flex-shrink:0;min-height:100vh}
+.sidebar-logo{font-family:var(--font-head);font-size:1.1rem;font-weight:800;padding:0 1.3rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-logo em{font-style:normal;color:var(--accent2)}
+.sidebar-nav{padding:1rem 0;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:0.7rem 1.3rem;font-size:0.88rem;font-weight:500;cursor:pointer;transition:background 0.2s;color:rgba(255,255,255,0.7);border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,0.12);color:#fff;border-left-color:var(--accent2)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.sidebar-footer{padding:1rem 1.3rem;border-top:1px solid rgba(255,255,255,0.1)}
+.sidebar-user{display:flex;align-items:center;gap:8px}
+.sidebar-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.3)}
+.sidebar-user-info{flex:1;min-width:0}
+.sidebar-user-name{font-size:0.8rem;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-role{font-size:0.7rem;color:var(--accent2)}
+.signout-btn{background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:0.78rem;margin-top:8px;padding:0;font-family:var(--font-body)}
+.signout-btn:hover{color:#fff}
+
+.main{flex:1;overflow-x:hidden}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-family:var(--font-head);font-size:1.2rem;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.refresh-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.9rem;font-size:0.82rem;cursor:pointer;font-family:var(--font-body);color:var(--text)}
+.refresh-btn:hover{background:#f4f4f4}
+.last-updated{font-size:0.78rem;color:var(--muted)}
+
+.content{padding:2rem;display:none}
+.content.active{display:block}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem}
+.stat-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.5rem}
+.stat-value{font-family:var(--font-head);font-size:1.8rem;font-weight:800;letter-spacing:-0.5px}
+.stat-sub{font-size:0.78rem;color:var(--muted);margin-top:4px}
+.stat-badge{display:inline-block;font-size:0.72rem;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:6px}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+
+/* TABLE */
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.table-head{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.table-head h3{font-family:var(--font-head);font-size:0.95rem;font-weight:700}
+.table-search{border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.8rem;font-family:var(--font-body);font-size:0.85rem;outline:none;width:200px}
+.table-search:focus{border-color:var(--accent)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{text-align:left;font-size:0.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:0.7rem 1rem;border-bottom:1px solid var(--border);background:#fafaf8}
+td{padding:0.75rem 1rem;font-size:0.85rem;border-bottom:1px solid #f0f0f0;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.user-cell{display:flex;align-items:center;gap:8px}
+.user-init{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;font-family:var(--font-head);flex-shrink:0}
+.user-name{font-weight:500}
+.user-email{font-size:0.78rem;color:var(--muted)}
+.pill{display:inline-block;font-size:0.72rem;font-weight:500;padding:2px 9px;border-radius:20px}
+.pill-green{background:var(--green-bg);color:var(--green)}
+.pill-blue{background:var(--blue-bg);color:var(--blue)}
+.pill-amber{background:var(--amber-bg);color:var(--amber)}
+
+/* CHART */
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:2rem}
+@media(max-width:700px){.chart-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem}
+.chart-card h3{font-family:var(--font-head);font-size:0.92rem;font-weight:700;margin-bottom:1rem}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;transition:opacity 0.2s;min-height:4px}
+.bar:hover{opacity:0.7}
+.bar-label{font-size:0.65rem;color:var(--muted);text-align:center}
+.donut-wrap{display:flex;flex-direction:column;gap:10px;margin-top:0.5rem}
+.donut-row{display:flex;align-items:center;gap:8px;font-size:0.82rem}
+.donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ADS MANAGER */
+.ads-grid{display:grid;gap:1rem;margin-bottom:1.5rem}
+.ad-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem}
+.ad-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.ad-card-header h4{font-family:var(--font-head);font-size:0.92rem;font-weight:700}
+.ad-card-actions{display:flex;gap:8px}
+.btn-sm{border:1px solid var(--border);background:transparent;border-radius:7px;padding:0.3rem 0.8rem;font-size:0.78rem;cursor:pointer;font-family:var(--font-body);transition:background 0.2s}
+.btn-sm:hover{background:#f4f4f4}
+.btn-sm.danger{color:var(--red);border-color:#f0b0b0}.btn-sm.danger:hover{background:var(--red-bg)}
+.btn-sm.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-sm.primary:hover{opacity:0.88}
+.form-group{margin-bottom:0.8rem}
+.form-group label{display:block;font-size:0.75rem;color:var(--muted);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid var(--border);border-radius:8px;padding:0.55rem 0.8rem;font-family:var(--font-body);font-size:0.88rem;outline:none;background:#fff;color:var(--text)}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem}
+.add-ad-card{background:var(--card);border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center}
+.add-ad-card h4{font-family:var(--font-head);font-weight:700;margin-bottom:0.4rem}
+.add-ad-card p{font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem}
+.btn-add{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:0.65rem 1.5rem;font-family:var(--font-body);font-size:0.88rem;font-weight:500;cursor:pointer}
+.btn-add:hover{opacity:0.88}
+
+/* ADD FORM */
+.add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;display:none}
+.add-form.open{display:block}
+.add-form-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.add-form-header h3{font-family:var(--font-head);font-size:1rem;font-weight:700}
+
+.toggle{position:relative;display:inline-block;width:36px;height:20px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:20px;transition:0.3s}
+.toggle-slider::before{position:absolute;content:'';height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s}
+input:checked+.toggle-slider{background:var(--accent)}
+input:checked+.toggle-slider::before{transform:translateX(16px)}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--accent);color:#fff;padding:0.7rem 1.2rem;border-radius:10px;font-size:0.88rem;font-weight:500;z-index:300;transform:translateY(100px);opacity:0;transition:all 0.35s}
+.toast.show{transform:translateY(0);opacity:1}
+.empty-state{text-align:center;padding:3rem;color:var(--muted);font-size:0.9rem}
+
+.section-label{font-size:0.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.4rem}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><span>R</span>esumeAI</div>
+    <h2>Admin Dashboard</h2>
+    <p>Sign in with your authorized admin Google account to access the dashboard.</p>
+    <button class="btn-google" onclick="adminSignIn()">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Sign in with Google
+    </button>
+    <div class="admin-email-note">Only authorized admin emails can access this dashboard. Set your admin email in the CONFIG below.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><em>L</em>inkedIn Optimizer <span style="font-size:0.7rem;color:rgba(255,255,255,0.5);font-weight:400">Admin</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="showTab('overview',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Overview
+        </div>
+        <div class="nav-item" onclick="showTab('users',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Users
+        </div>
+        <div class="nav-item" onclick="showTab('payments',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Payments
+        </div>
+        <div class="nav-item" onclick="showTab('ads',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Affiliate Ads
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <img id="admin-avatar" class="sidebar-avatar" src="" alt=""/>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="admin-name">Admin</div>
+            <div class="sidebar-user-role">Administrator</div>
+          </div>
+        </div>
+        <button class="signout-btn" onclick="adminSignOut()">Sign out</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <h1 id="topbar-title">Overview</h1>
+        <div class="topbar-right">
+          <span class="last-updated" id="last-updated"></span>
+          <button class="refresh-btn" onclick="loadAllData()">Refresh</button>
+        </div>
+      </div>
+
+      <!-- OVERVIEW -->
+      <div class="content active" id="tab-overview">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total users</div>
+            <div class="stat-value" id="stat-users">—</div>
+            <span class="stat-badge badge-blue">registered</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total revenue</div>
+            <div class="stat-value" id="stat-revenue">—</div>
+            <span class="stat-badge badge-green">all time</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Optimizations</div>
+            <div class="stat-value" id="stat-opts">—</div>
+            <span class="stat-badge badge-amber">AI runs</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Paying users</div>
+            <div class="stat-value" id="stat-paying">—</div>
+            <span class="stat-badge badge-green">converted</span>
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3>Signups (last 7 days)</h3>
+            <div class="bar-chart" id="signup-chart"></div>
+          </div>
+          <div class="chart-card">
+            <h3>Plan distribution</h3>
+            <div class="donut-wrap" id="plan-dist"></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head"><h3>Recent signups</h3></div>
+          <table>
+            <colgroup><col style="width:35%"><col style="width:20%"><col style="width:20%"><col style="width:25%"></colgroup>
+            <thead><tr><th>User</th><th>Plan</th><th>Credits</th><th>Joined</th></tr></thead>
+            <tbody id="recent-users-body"><tr><td colspan="4" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="content" id="tab-users">
+        <div class="table-card">
+          <div class="table-head">
+            <h3>All users</h3>
+            <input class="table-search" id="user-search" placeholder="Search by name or email..." oninput="filterUsers()"/>
+          </div>
+          <table>
+            <colgroup><col style="width:30%"><col style="width:15%"><col style="width:12%"><col style="width:13%"><col style="width:15%"><col style="width:15%"></colgroup>
+            <thead><tr><th>User</th><th>Plan</th><th>Credits</th><th>Revenue</th><th>Optimizations</th><th>Last active</th></tr></thead>
+            <tbody id="users-body"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAYMENTS -->
+      <div class="content" id="tab-payments">
+        <div class="stat-grid" style="margin-bottom:1.5rem">
+          <div class="stat-card">
+            <div class="stat-label">Total transactions</div>
+            <div class="stat-value" id="stat-txns">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total collected</div>
+            <div class="stat-value" id="stat-collected">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg. order value</div>
+            <div class="stat-value" id="stat-aov">—</div>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="table-head"><h3>Payment history</h3></div>
+          <table>
+            <colgroup><col style="width:25%"><col style="width:20%"><col style="width:15%"><col style="width:15%"><col style="width:25%"></colgroup>
+            <thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Credits</th><th>Date</th></tr></thead>
+            <tbody id="payments-body"><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADS -->
+      <div class="content" id="tab-ads">
+        <div id="add-ad-form" class="add-form">
+          <div class="add-form-header">
+            <h3>Add new affiliate ad</h3>
+            <button class="btn-sm" onclick="closeAdForm()">Cancel</button>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label>Ad title</label><input type="text" id="ad-title" placeholder="e.g. Coursera — Learn faster"/></div>
+            <div class="form-group"><label>Subtitle / tagline</label><input type="text" id="ad-subtitle" placeholder="e.g. Get certified in 4 weeks"/></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group"><label>Affiliate / destination URL</label><input type="url" id="ad-url" placeholder="https://..."/></div>
+            <div class="form-group"><label>CTA button text</label><input type="text" id="ad-cta" placeholder="e.g. Enroll Now"/></div>
+          </div>
+          <div class="form-group"><label>Notes (internal only)</label><input type="text" id="ad-notes" placeholder="e.g. 15% commission, valid till Dec 2025"/></div>
+          <div style="display:flex;gap:10px;margin-top:0.5rem">
+            <button class="btn-sm primary" onclick="saveAd()">Save Ad</button>
+            <button class="btn-sm danger" onclick="closeAdForm()">Cancel</button>
+          </div>
+        </div>
+
+        <div id="ads-list"></div>
+
+        <div class="add-ad-card" id="add-cta-card">
+          <h4>Add an affiliate ad</h4>
+          <p>Paste any affiliate link — it will show as a banner in the user app.</p>
+          <button class="btn-add" onclick="openAdForm()">+ Add New Ad</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  CONFIG — Replace with your own values
+// ═══════════════════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "REPLACE_FIREBASE_API_KEY",
+  authDomain: "REPLACE_PROJECT_ID.firebaseapp.com",
+  projectId: "REPLACE_PROJECT_ID",
+  storageBucket: "REPLACE_PROJECT_ID.appspot.com",
+  messagingSenderId: "REPLACE_SENDER_ID",
+  appId: "REPLACE_APP_ID"
+};
+// ── ADMIN ACCESS ──────────────────────────────────────────────
+// Only Google accounts listed here can log in to the dashboard.
+// Authentication is handled entirely by Google — no password stored here.
+// To add more admins, just add their Gmail addresses to this array.
+const ADMIN_EMAILS = [
+  "YOUR_GMAIL_HERE@gmail.com"  // ← Replace with your Gmail address
+];
+// ═══════════════════════════════════════════════════════════════
+
+let app, auth, db;
+let allUsers = [], allPayments = [], allAds = [];
+let editingAdId = null;
+
+try {
+  app = firebase.initializeApp(FIREBASE_CONFIG);
+  auth = firebase.auth();
+  db = firebase.firestore();
+  auth.onAuthStateChanged(handleAuth);
+} catch(e) {
+  console.warn('Firebase not configured:', e.message);
+  showDemoMode();
+}
+
+async function handleAuth(user) {
+  if (!user) { showLogin(); return; }
+  if (!ADMIN_EMAILS.includes(user.email)) {
+    await auth.signOut();
+    showLogin();
+    showToast('Access denied. Not an admin email.');
+    return;
+  }
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('admin-name').textContent = user.displayName || user.email;
+  document.getElementById('admin-avatar').src = user.photoURL || '';
+  await loadAllData();
+}
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+function adminSignIn() {
+  if (!auth) { showDemoMode(); return; }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(e => showToast('Error: ' + e.message));
+}
+
+function adminSignOut() {
+  if (auth) auth.signOut();
+  showLogin();
+}
+
+async function loadAllData() {
+  document.getElementById('last-updated').textContent = 'Updating...';
+  try {
+    const [usersSnap, paymentsSnap, adsSnap] = await Promise.all([
+      db.collection('users').orderBy('joinedAt','desc').limit(200).get(),
+      db.collection('payments').orderBy('createdAt','desc').limit(200).get(),
+      db.collection('settings').doc('ads').get()
+    ]);
+    allUsers = usersSnap.docs.map(d => ({id:d.id,...d.data()}));
+    allPayments = paymentsSnap.docs.map(d => ({id:d.id,...d.data()}));
+    allAds = adsSnap.exists ? (adsSnap.data().active || []) : [];
+
+    renderOverview();
+    renderUsers();
+    renderPayments();
+    renderAds();
+    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  } catch(e) {
+    console.warn('Load error:', e.message);
+    showDemoMode();
+  }
+}
+
+function renderOverview() {
+  const totalRevenue = allUsers.reduce((s,u) => s + (u.totalPaid || 0), 0);
+  const totalOpts = allUsers.reduce((s,u) => s + (u.optimizations || 0), 0);
+  const payingCount = allUsers.filter(u => u.plan && u.plan !== 'free').length;
+  document.getElementById('stat-users').textContent = allUsers.length;
+  document.getElementById('stat-revenue').textContent = '₹' + totalRevenue.toLocaleString('en-IN');
+  document.getElementById('stat-opts').textContent = totalOpts;
+  document.getElementById('stat-paying').textContent = payingCount;
+
+  const recent5 = allUsers.slice(0,5);
+  document.getElementById('recent-users-body').innerHTML = recent5.length
+    ? recent5.map(u => `<tr>
+        <td><div class="user-cell"><div class="user-init">${initials(u.name||u.email)}</div><div><div class="user-name">${u.name||'Guest'}</div><div class="user-email">${u.email||''}</div></div></div></td>
+        <td><span class="pill ${planColor(u.plan)}">${u.plan||'free'}</span></td>
+        <td>${u.credits||0}</td>
+        <td>${fmtDate(u.joinedAt)}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="4" class="empty-state">No users yet</td></tr>';
+
+  renderChart();
+  renderPlanDist();
+}
+
+function renderChart() {
+  const days = [];
+  for (let i=6;i>=0;i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    days.push(d.toISOString().split('T')[0]);
+  }
+  const counts = days.map(day => allUsers.filter(u => (u.joinedAt||'').startsWith(day)).length);
+  const max = Math.max(...counts, 1);
+  document.getElementById('signup-chart').innerHTML = days.map((day,i) => `
+    <div class="bar-wrap">
+      <div class="bar" style="height:${Math.max(4,Math.round((counts[i]/max)*110))}px" title="${counts[i]} signups"></div>
+      <div class="bar-label">${day.slice(5)}</div>
+    </div>`).join('');
+}
+
+function renderPlanDist() {
+  const plans = {free:0,starter:0,pro:0,power:0};
+  allUsers.forEach(u => { const p = u.plan||'free'; if(plans[p]!==undefined) plans[p]++; });
+  const total = allUsers.length || 1;
+  const colors = {free:'#e2e2e2',starter:'#b5d4f4',pro:'#1a1a2e',power:'#e8ff47'};
+  const labels = {free:'Free',starter:'Starter',pro:'Pro',power:'Power'};
+  document.getElementById('plan-dist').innerHTML = Object.entries(plans)
+    .filter(([,v])=>v>0)
+    .map(([k,v]) => `<div class="donut-row">
+      <div class="donut-dot" style="background:${colors[k]}"></div>
+      <span style="flex:1">${labels[k]}</span>
+      <strong>${v}</strong>
+      <span style="color:var(--muted);font-size:0.75rem">${Math.round(v/total*100)}%</span>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:0.85rem">No data</div>';
+}
+
+function renderUsers() {
+  const q = (document.getElementById('user-search')?.value||'').toLowerCase();
+  const filtered = q ? allUsers.filter(u => (u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q)) : allUsers;
+  document.getElementById('users-body').innerHTML = filtered.length
+    ? filtered.map(u => `<tr>
+        <td><div class="user-cell"><div class="user-init">${initials(u.name||u.email)}</div><div><div class="user-name">${u.name||'Guest'}</div><div class="user-email">${u.email||''}</div></div></div></td>
+        <td><span class="pill ${planColor(u.plan)}">${u.plan||'free'}</span></td>
+        <td>${u.credits||0}</td>
+        <td>₹${(u.totalPaid||0).toLocaleString('en-IN')}</td>
+        <td>${u.optimizations||0}</td>
+        <td>${fmtDate(u.lastActive)}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" class="empty-state">No users found</td></tr>';
+}
+
+function filterUsers() { renderUsers(); }
+
+function renderPayments() {
+  const total = allPayments.reduce((s,p)=>s+(p.amount||0),0);
+  const aov = allPayments.length ? Math.round(total/allPayments.length) : 0;
+  document.getElementById('stat-txns').textContent = allPayments.length;
+  document.getElementById('stat-collected').textContent = '₹'+total.toLocaleString('en-IN');
+  document.getElementById('stat-aov').textContent = '₹'+aov;
+  document.getElementById('payments-body').innerHTML = allPayments.length
+    ? allPayments.map(p => `<tr>
+        <td style="overflow:hidden;text-overflow:ellipsis">${p.email||'—'}</td>
+        <td><span class="pill ${planColor(p.plan?.toLowerCase())}">${p.plan||'—'}</span></td>
+        <td>₹${(p.amount||0).toLocaleString('en-IN')}</td>
+        <td>${p.credits||0}</td>
+        <td>${fmtDate(p.createdAt)}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="5" class="empty-state">No payments yet</td></tr>';
+}
+
+function renderAds() {
+  const list = document.getElementById('ads-list');
+  list.innerHTML = allAds.map((ad,i) => `
+    <div class="ad-card">
+      <div class="ad-card-header">
+        <h4>${ad.title||'Untitled Ad'}</h4>
+        <div class="ad-card-actions">
+          <label class="toggle"><input type="checkbox" ${ad.active!==false?'checked':''} onchange="toggleAd(${i},this.checked)"/><span class="toggle-slider"></span></label>
+          <button class="btn-sm" onclick="editAd(${i})">Edit</button>
+          <button class="btn-sm danger" onclick="deleteAd(${i})">Delete</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1.5rem;font-size:0.83rem">
+        <div><span style="color:var(--muted)">URL:</span> <a href="${ad.url}" target="_blank" style="color:var(--blue);text-decoration:none;word-break:break-all">${ad.url||'—'}</a></div>
+        <div><span style="color:var(--muted)">CTA:</span> ${ad.cta||'—'}</div>
+        <div><span style="color:var(--muted)">Subtitle:</span> ${ad.subtitle||'—'}</div>
+        <div><span style="color:var(--muted)">Notes:</span> ${ad.notes||'—'}</div>
+      </div>
+      <div style="margin-top:0.8rem;padding:0.7rem 1rem;background:#fafaf8;border-radius:8px;font-size:0.8rem;color:var(--muted)">
+        Preview: <strong style="color:var(--text)">${ad.title}</strong> — ${ad.subtitle} <span style="background:var(--accent);color:#fff;padding:2px 8px;border-radius:5px;font-size:0.75rem;margin-left:6px">${ad.cta||'Learn More'}</span>
+      </div>
+    </div>`).join('');
+}
+
+function openAdForm(prefill) {
+  const form = document.getElementById('add-ad-form');
+  form.classList.add('open');
+  if (prefill) {
+    document.getElementById('ad-title').value = prefill.title||'';
+    document.getElementById('ad-subtitle').value = prefill.subtitle||'';
+    document.getElementById('ad-url').value = prefill.url||'';
+    document.getElementById('ad-cta').value = prefill.cta||'';
+    document.getElementById('ad-notes').value = prefill.notes||'';
+  } else {
+    document.getElementById('add-ad-form').querySelectorAll('input').forEach(i=>i.value='');
+  }
+  form.scrollIntoView({behavior:'smooth'});
+}
+function closeAdForm() { document.getElementById('add-ad-form').classList.remove('open'); editingAdId=null; }
+
+function editAd(i) { editingAdId=i; openAdForm(allAds[i]); }
+
+async function saveAd() {
+  const ad = {
+    title: document.getElementById('ad-title').value.trim(),
+    subtitle: document.getElementById('ad-subtitle').value.trim(),
+    url: document.getElementById('ad-url').value.trim(),
+    cta: document.getElementById('ad-cta').value.trim(),
+    notes: document.getElementById('ad-notes').value.trim(),
+    active: true, createdAt: new Date().toISOString()
+  };
+  if (!ad.title || !ad.url) { showToast('Title and URL are required'); return; }
+  if (editingAdId !== null) { allAds[editingAdId] = {...allAds[editingAdId], ...ad}; }
+  else { allAds.push(ad); }
+  await saveAdsToFirestore();
+  closeAdForm();
+  renderAds();
+  showToast('Ad saved and live in user app');
+}
+
+async function deleteAd(i) {
+  if (!confirm('Delete this ad?')) return;
+  allAds.splice(i,1);
+  await saveAdsToFirestore();
+  renderAds();
+  showToast('Ad deleted');
+}
+
+async function toggleAd(i, active) {
+  allAds[i].active = active;
+  await saveAdsToFirestore();
+  showToast(active ? 'Ad enabled' : 'Ad paused');
+}
+
+async function saveAdsToFirestore() {
+  if (!db) return;
+  await db.collection('settings').doc('ads').set({active: allAds});
+}
+
+function showDemoMode() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('admin-name').textContent = 'Demo Admin';
+  document.getElementById('admin-avatar').src = '';
+  allUsers = [
+    {name:'Priya Sharma',email:'priya@gmail.com',plan:'pro',credits:14,totalPaid:249,optimizations:6,joinedAt:'2025-04-20T10:00:00Z',lastActive:'2025-04-27T08:00:00Z'},
+    {name:'Rahul Mehta',email:'rahul@gmail.com',plan:'starter',credits:2,totalPaid:99,optimizations:3,joinedAt:'2025-04-22T12:00:00Z',lastActive:'2025-04-26T14:00:00Z'},
+    {name:'Ananya Roy',email:'ananya@gmail.com',plan:'free',credits:0,totalPaid:0,optimizations:1,joinedAt:'2025-04-25T09:00:00Z',lastActive:'2025-04-25T09:30:00Z'},
+    {name:'Kabir Singh',email:'kabir@gmail.com',plan:'power',credits:48,totalPaid:499,optimizations:2,joinedAt:'2025-04-23T11:00:00Z',lastActive:'2025-04-27T07:00:00Z'},
+    {name:'Meera Patel',email:'meera@gmail.com',plan:'pro',credits:19,totalPaid:249,optimizations:1,joinedAt:'2025-04-26T15:00:00Z',lastActive:'2025-04-26T16:00:00Z'},
+  ];
+  allPayments = [
+    {email:'priya@gmail.com',plan:'Pro',amount:249,credits:20,createdAt:'2025-04-20T10:30:00Z'},
+    {email:'rahul@gmail.com',plan:'Starter',amount:99,credits:5,createdAt:'2025-04-22T12:10:00Z'},
+    {email:'kabir@gmail.com',plan:'Power',amount:499,credits:50,createdAt:'2025-04-23T11:20:00Z'},
+    {email:'meera@gmail.com',plan:'Pro',amount:249,credits:20,createdAt:'2025-04-26T15:05:00Z'},
+  ];
+  allAds = [{title:'Coursera — Advance Your Career',subtitle:'Get certified in top skills online',url:'https://coursera.org',cta:'Explore Courses',notes:'Demo ad',active:true}];
+  renderOverview(); renderUsers(); renderPayments(); renderAds();
+  document.getElementById('last-updated').textContent = 'Demo mode (Firebase not configured)';
+}
+
+function showTab(tab, el) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  el.classList.add('active');
+  const titles = {overview:'Overview',users:'Users',payments:'Payments',ads:'Affiliate Ads'};
+  document.getElementById('topbar-title').textContent = titles[tab]||tab;
+}
+
+function initials(str) { return (str||'U').split(/\s+|@/).map(s=>s[0]).join('').toUpperCase().slice(0,2); }
+function planColor(p) { return {pro:'pill-blue',power:'pill-amber',starter:'pill-green'}[p]||''; }
+function fmtDate(iso) { if(!iso) return '—'; const d=new Date(iso); return d.toLocaleDateString('en-IN',{day:'numeric',month:'short'}); }
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+</script>
+</body>
+</html>

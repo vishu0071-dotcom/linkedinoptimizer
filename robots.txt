@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+# Block admin dashboard from indexing
+User-agent: Googlebot
+Disallow: /admin.html
+
+Sitemap: https://linkedinoptimizer.co.in/sitemap.xml
