@@ -1,23 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/create-order",
-      "dest": "/api/create-order.js"
+      "source": "/api/create-order",
+      "destination": "/api/create-order.js"
     },
     {
-      "src": "/api/verify-payment",
-      "dest": "/api/verify-payment.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/api/verify-payment",
+      "destination": "/api/verify-payment.js"
     }
   ]
 }
