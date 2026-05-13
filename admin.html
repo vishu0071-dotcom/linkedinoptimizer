@@ -370,8 +370,8 @@ try {
   db = firebase.firestore();
   auth.onAuthStateChanged(handleAuth);
 } catch(e) {
-  console.warn('Firebase not configured:', e.message);
-  showDemoMode();
+  console.error('Firebase init error:', e.message);
+  document.getElementById('last-updated') && (document.getElementById('last-updated').textContent = 'Firebase error: ' + e.message);
 }
 
 async function handleAuth(user) {
@@ -424,7 +424,15 @@ async function loadAllData() {
     document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
   } catch(e) {
     console.warn('Load error:', e.message);
-    showDemoMode();
+    // Show empty real dashboard instead of demo mode
+    allUsers = [];
+    allPayments = [];
+    allAds = [];
+    renderOverview();
+    renderUsers();
+    renderPayments();
+    renderAds();
+    document.getElementById('last-updated').textContent = 'Error loading data: ' + e.message;
   }
 }
 
