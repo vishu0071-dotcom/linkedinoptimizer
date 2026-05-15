@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Admin Dashboard — LinkedInOptimizer.net</title>
+<title>Admin Dashboard — LinkedInOptimizer.co.in</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+
+<!-- Firebase SDKs loaded in head to ensure availability -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -334,13 +339,9 @@ input:checked+.toggle-slider::before{transform:translateX(16px)}
 
 <div class="toast" id="toast"></div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  CONFIG — Replace with your own values
+//  CONFIG
 // ═══════════════════════════════════════════════════════════════
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAhNxHDNr66lyfPAQ6NZLvzhTyrV4T1KHE",
@@ -351,10 +352,6 @@ const FIREBASE_CONFIG = {
   appId: "1:61478857544:web:12c8a797081613e07c217d",
   measurementId: "G-GGGBZNSX11"
 };
-// ── ADMIN ACCESS ──────────────────────────────────────────────
-// Only Google accounts listed here can log in to the dashboard.
-// Authentication is handled entirely by Google — no password stored here.
-// To add more admins, just add their Gmail addresses to this array.
 const ADMIN_EMAILS = [
   "vishu0071@gmail.com"
 ];
@@ -368,10 +365,11 @@ try {
   app = firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
   db = firebase.firestore();
+  // Disable offline persistence to fix "client is offline" error
+  db.settings({ experimentalForceLongPolling: true, merge: true });
   auth.onAuthStateChanged(handleAuth);
 } catch(e) {
   console.error('Firebase init error:', e.message);
-  document.getElementById('last-updated') && (document.getElementById('last-updated').textContent = 'Firebase error: ' + e.message);
 }
 
 async function handleAuth(user) {
