@@ -365,6 +365,7 @@ try {
   app = firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
   db = firebase.firestore();
+  db.settings({ experimentalForceLongPolling: true });
   // Disable offline persistence to fix "client is offline" error
   db.settings({ experimentalForceLongPolling: true, merge: true });
   auth.onAuthStateChanged(handleAuth);
