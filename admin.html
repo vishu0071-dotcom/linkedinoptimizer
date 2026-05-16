@@ -625,7 +625,7 @@ async function saveAdsToFirestore() {
   if (!db) return;
   await db.ref('settings/ads').set({active: allAds});
 }
-}
+
 
 function showDemoMode() {
   document.getElementById('login-screen').style.display = 'none';
