@@ -372,13 +372,17 @@ try {
 }
 
 async function handleAuth(user) {
+  console.log('Auth state changed:', user ? user.email : 'not logged in');
   if (!user) { showLogin(); return; }
+  console.log('Checking admin access for:', user.email);
+  console.log('Admin emails list:', ADMIN_EMAILS);
   if (!ADMIN_EMAILS.includes(user.email)) {
     await auth.signOut();
     showLogin();
-    showToast('Access denied. Not an admin email.');
+    showToast('Access denied: ' + user.email + ' is not an admin.');
     return;
   }
+  console.log('Admin access granted!');
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('admin-name').textContent = user.displayName || user.email;
@@ -392,9 +396,20 @@ function showLogin() {
 }
 
 function adminSignIn() {
-  if (!auth) { showDemoMode(); return; }
+  if (!auth) {
+    showToast('Firebase not initialized. Please refresh the page.');
+    return;
+  }
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(e => showToast('Error: ' + e.message));
+  provider.setCustomParameters({ prompt: 'select_account' });
+  auth.signInWithPopup(provider)
+    .then(result => {
+      console.log('Sign in successful:', result.user.email);
+    })
+    .catch(e => {
+      console.error('Sign in error:', e.code, e.message);
+      showToast('Sign in error: ' + e.message);
+    });
 }
 
 function adminSignOut() {
