@@ -9,7 +9,7 @@
 <!-- Firebase SDKs loaded in head to ensure availability -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -350,7 +350,8 @@ const FIREBASE_CONFIG = {
   storageBucket: "linkedinoptimizer-4e8c0.firebasestorage.app",
   messagingSenderId: "61478857544",
   appId: "1:61478857544:web:12c8a797081613e07c217d",
-  measurementId: "G-GGGBZNSX11"
+  measurementId: "G-GGGBZNSX11",
+  databaseURL: "https://linkedinoptimizer-4e8c0-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 const ADMIN_EMAILS = [
   "vishu0071@gmail.com"
@@ -364,10 +365,7 @@ let editingAdId = null;
 try {
   app = firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
-  db = firebase.firestore();
-  db.settings({ experimentalForceLongPolling: true });
-  // Disable offline persistence to fix "client is offline" error
-  db.settings({ experimentalForceLongPolling: true, merge: true });
+  db = firebase.database(); // Realtime Database — works reliably in India
   auth.onAuthStateChanged(handleAuth);
 } catch(e) {
   console.error('Firebase init error:', e.message);
@@ -408,13 +406,25 @@ async function loadAllData() {
   document.getElementById('last-updated').textContent = 'Updating...';
   try {
     const [usersSnap, paymentsSnap, adsSnap] = await Promise.all([
-      db.collection('users').orderBy('joinedAt','desc').limit(200).get(),
-      db.collection('payments').orderBy('createdAt','desc').limit(200).get(),
-      db.collection('settings').doc('ads').get()
+      db.ref('users').once('value'),
+      db.ref('payments').once('value'),
+      db.ref('settings/ads').once('value')
     ]);
-    allUsers = usersSnap.docs.map(d => ({id:d.id,...d.data()}));
-    allPayments = paymentsSnap.docs.map(d => ({id:d.id,...d.data()}));
-    allAds = adsSnap.exists ? (adsSnap.data().active || []) : [];
+
+    // Convert Realtime Database snapshots to arrays
+    allUsers = [];
+    usersSnap.forEach(child => {
+      allUsers.push({id: child.key, ...child.val()});
+    });
+    allUsers.reverse(); // newest first
+
+    allPayments = [];
+    paymentsSnap.forEach(child => {
+      allPayments.push({id: child.key, ...child.val()});
+    });
+    allPayments.reverse(); // newest first
+
+    allAds = adsSnap.exists() ? (adsSnap.val()?.active || []) : [];
 
     renderOverview();
     renderUsers();
@@ -423,7 +433,6 @@ async function loadAllData() {
     document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
   } catch(e) {
     console.warn('Load error:', e.message);
-    // Show empty real dashboard instead of demo mode
     allUsers = [];
     allPayments = [];
     allAds = [];
@@ -431,7 +440,7 @@ async function loadAllData() {
     renderUsers();
     renderPayments();
     renderAds();
-    document.getElementById('last-updated').textContent = 'Error loading data: ' + e.message;
+    document.getElementById('last-updated').textContent = 'Error: ' + e.message;
   }
 }
 
@@ -599,7 +608,8 @@ async function toggleAd(i, active) {
 
 async function saveAdsToFirestore() {
   if (!db) return;
-  await db.collection('settings').doc('ads').set({active: allAds});
+  await db.ref('settings/ads').set({active: allAds});
+}
 }
 
 function showDemoMode() {
