@@ -193,31 +193,130 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --accent:#1a1a2e;--accent2:#e8ff47;
-  --text:#111;--muted:#666;--border:#e2e2e2;
-  --bg:#fafaf8;--card:#fff;--radius:14px;
-  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
-  --green:#3a6e00;--green-bg:#f0ffd6;--green-border:#c8f06a;
+  --accent:#f5c300;--accent2:#ffd700;
+  --text:#f0f0f0;--muted:#888;--border:#222;
+  --bg:#0a0a0a;--card:#111;--card2:#161616;--radius:12px;
+  --font-head:'Orbitron',sans-serif;--font-body:'Space Grotesk',sans-serif;
+  --green:#00ff88;--green-bg:rgba(0,255,136,0.1);--green-border:rgba(0,255,136,0.3);
+  --glow:0 0 20px rgba(245,195,0,0.3);
 }
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
 
-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2rem;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:99999}
-.logo{font-family:var(--font-head);font-weight:800;font-size:1.35rem;letter-spacing:-0.5px}
-.logo span{background:var(--accent);color:var(--accent2);padding:2px 8px;border-radius:6px;margin-right:2px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.97);backdrop-filter:blur(10px);position:sticky;top:0;z-index:99999}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{height:36px;width:auto}
+.logo span{color:var(--accent);font-family:var(--font-head);font-weight:700;font-size:1rem;letter-spacing:1px}
 .nav-right{display:flex;gap:10px;align-items:center}
 .nav-user{display:flex;align-items:center;gap:8px;font-size:0.88rem;color:var(--muted)}
-.nav-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border)}
-.nav-avatar-init{width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;font-family:var(--font-head)}
-.btn{border-radius:9px;padding:0.55rem 1.2rem;font-family:var(--font-body);font-size:0.88rem;font-weight:500;cursor:pointer;transition:opacity 0.2s,background 0.2s;border:none}
-.btn-dark{background:var(--accent);color:#fff}.btn-dark:hover{opacity:0.87}
-.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}.btn-outline:hover{background:#f4f4f4}
-.btn-google{display:flex;align-items:center;gap:10px;background:#fff;color:#333;border:1.5px solid var(--border);border-radius:10px;padding:0.75rem 1.5rem;font-family:var(--font-body);font-size:0.95rem;font-weight:500;cursor:pointer;transition:background 0.2s}
-.btn-google:hover{background:#f7f7f7}
+.nav-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--accent)}
+.nav-avatar-init{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;font-family:var(--font-head)}
+.btn{border-radius:8px;padding:0.55rem 1.2rem;font-family:var(--font-body);font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.2s;border:none}
+.btn-dark{background:var(--accent);color:#000;font-weight:600}.btn-dark:hover{background:var(--accent2);box-shadow:var(--glow)}
+.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}.btn-outline:hover{background:rgba(245,195,0,0.08)}
+.btn-google{display:flex;align-items:center;gap:10px;background:#1a1a1a;color:#f0f0f0;border:1.5px solid var(--border);border-radius:10px;padding:0.75rem 1.5rem;font-family:var(--font-body);font-size:0.95rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+.btn-google:hover{border-color:var(--accent)}
 .btn-google svg{width:20px;height:20px;flex-shrink:0}
+.screen{display:none}.screen.active{display:block}
+.hero{max-width:840px;margin:0 auto;padding:5rem 2rem 3rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(245,195,0,0.08);border:1px solid rgba(245,195,0,0.3);color:var(--accent);font-size:0.78rem;font-weight:500;padding:6px 16px;border-radius:20px;margin-bottom:1.5rem}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(245,195,0,0.4)}50%{opacity:0.5;box-shadow:0 0 0 6px rgba(245,195,0,0)}}
+.hero h1{font-family:var(--font-head);font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;letter-spacing:2px;margin-bottom:1.2rem;text-transform:uppercase}
+.hero h1 em{font-style:normal;color:var(--accent);text-shadow:var(--glow)}
+.hero p{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto 2.5rem;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.9rem 2rem;font-family:var(--font-body);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:var(--accent2);box-shadow:var(--glow);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--accent);border:1.5px solid var(--accent);border-radius:8px;padding:0.9rem 2rem;font-family:var(--font-body);font-size:1rem;font-weight:500;cursor:pointer;transition:all 0.2s}
+.btn-secondary:hover{background:rgba(245,195,0,0.08)}
+.stats{display:flex;justify-content:center;max-width:560px;margin:3rem auto 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.stat{flex:1;padding:1.2rem 1rem;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--accent)}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-top:2px}
+.section{max-width:880px;margin:0 auto;padding:4rem 2rem}
+.section-label{font-size:0.7rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:0.4rem;font-family:var(--font-head)}
+.section h2{font-family:var(--font-head);font-size:1.4rem;font-weight:700;letter-spacing:2px;margin-bottom:2.5rem;text-transform:uppercase}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;transition:all 0.2s}
+.step-card:hover{border-color:var(--accent);box-shadow:var(--glow)}
+.step-num{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:#000;background:var(--accent);display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;margin-bottom:0.9rem}
+.step-card h3{font-family:var(--font-head);font-size:0.72rem;font-weight:600;margin-bottom:0.35rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.step-card p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.7rem;position:relative;transition:all 0.2s}
+.price-card:hover,.price-card.popular{border-color:var(--accent);box-shadow:var(--glow)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap;font-family:var(--font-head);letter-spacing:1px}
+.price-name{font-family:var(--font-head);font-weight:600;font-size:0.72rem;margin-bottom:0.7rem;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+.price-amount{font-family:var(--font-head);font-size:1.9rem;font-weight:700;color:#fff}
+.price-amount small{font-size:0.85rem;font-weight:400;color:var(--muted)}
+.price-desc{font-size:0.82rem;color:var(--muted);margin:0.4rem 0 1.1rem}
+.price-features{list-style:none;margin-bottom:1.4rem}
+.price-features li{font-size:0.83rem;padding:0.3rem 0;color:#bbb}
+.price-features li::before{content:"✓ ";color:var(--green);font-weight:700}
+.price-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.75rem;font-family:var(--font-body);font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.price-btn:hover{background:var(--accent2);box-shadow:var(--glow)}
+.price-btn.outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.price-btn.outline:hover{background:rgba(245,195,0,0.08)}
+.login-wrap{max-width:420px;margin:5rem auto;padding:2rem;text-align:center}
+.login-wrap h2{font-family:var(--font-head);font-size:1.2rem;font-weight:700;letter-spacing:2px;margin-bottom:0.6rem;color:var(--accent);text-transform:uppercase}
+.login-wrap p{color:var(--muted);font-size:0.95rem;margin-bottom:2.5rem;line-height:1.6}
+.login-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.divider{width:100%;border-top:1px solid var(--border);margin:0.5rem 0}
+.optimizer{max-width:800px;margin:0 auto;padding:2rem}
+.optimizer h2{font-family:var(--font-head);font-size:1.2rem;font-weight:700;letter-spacing:2px;margin-bottom:0.3rem;text-transform:uppercase;color:var(--accent)}
+.sub{font-size:0.92rem;color:var(--muted);margin-bottom:1.8rem}
+.credits-bar{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.65rem 1rem;margin-bottom:1.4rem;font-size:0.88rem}
+.credit-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 8px var(--green)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.field label{display:block;font-size:0.68rem;font-weight:600;color:var(--accent);margin-bottom:5px;text-transform:uppercase;letter-spacing:1.5px;font-family:var(--font-head)}
+.field textarea,.field input,.field select{width:100%;border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.85rem;font-family:var(--font-body);font-size:0.92rem;background:#0d0d0d;color:var(--text);resize:vertical;transition:border-color 0.2s;outline:none}
+.field textarea:focus,.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(245,195,0,0.08)}
+.full{grid-column:1/-1}
+.run-btn{background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.9rem 2.2rem;font-family:var(--font-body);font-size:0.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;margin-top:0.8rem}
+.run-btn:hover:not(:disabled){background:var(--accent2);box-shadow:var(--glow)}
+.run-btn:disabled{opacity:0.4;cursor:not-allowed}
+.result-area{margin-top:1.8rem;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.result-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.3rem;border-bottom:1px solid var(--border);background:var(--card2)}
+.result-header h3{font-family:var(--font-head);font-size:0.72rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.score-pill{background:var(--accent);color:#000;font-family:var(--font-head);font-size:0.78rem;font-weight:700;padding:4px 13px;border-radius:20px}
+.result-tabs{display:flex;border-bottom:1px solid var(--border)}
+.tab-btn{flex:1;padding:0.75rem;font-family:var(--font-body);font-size:0.85rem;font-weight:500;background:transparent;border:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:1.3rem}
+.tab-content.active{display:block}
+.tab-content pre{white-space:pre-wrap;font-family:var(--font-body);font-size:0.88rem;line-height:1.7;color:#ccc}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999999;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;width:100%;max-width:410px}
+.modal h3{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.3rem;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px}
+.modal .msub{font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem}
+.plan-select{display:grid;gap:0.7rem;margin-bottom:1.4rem}
+.plan-opt{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;cursor:pointer;transition:all 0.2s;background:#0d0d0d}
+.plan-opt.selected{border-color:var(--accent);background:rgba(245,195,0,0.05)}
+.plan-opt-left{display:flex;align-items:center;gap:9px}
+.plan-radio{width:17px;height:17px;border-radius:50%;border:2px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.plan-radio.checked{border-color:var(--accent)}
+.plan-radio.checked::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);display:block}
+.plan-name{font-weight:500;font-size:0.92rem;color:#fff}
+.plan-credits{font-size:0.78rem;color:var(--muted)}
+.plan-price{font-family:var(--font-head);font-weight:700;color:var(--accent)}
+.pay-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.9rem;font-family:var(--font-body);font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.pay-btn:hover{background:var(--accent2);box-shadow:var(--glow)}
+.modal-close{float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+.razorpay-note{font-size:0.76rem;color:var(--muted);text-align:center;margin-top:0.9rem}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--accent);color:#000;padding:0.75rem 1.3rem;border-radius:8px;font-size:0.88rem;font-weight:600;z-index:9999999;transform:translateY(100px);opacity:0;transition:all 0.35s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.loading-dots{display:inline-flex;gap:5px}
+.loading-dots span{width:7px;height:7px;border-radius:50%;background:currentColor;animation:dot 1.2s infinite}
+.loading-dots span:nth-child(2){animation-delay:0.2s}
+.loading-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,80%,100%{opacity:0.2}40%{opacity:1}}
 
 .screen{display:none}.screen.active{display:block}
 
@@ -254,7 +353,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .price-amount small{font-size:0.95rem;font-weight:400;color:var(--muted)}
 .price-desc{font-size:0.83rem;color:var(--muted);margin:0.4rem 0 1.1rem}
 .price-features{list-style:none;margin-bottom:1.4rem}
-.price-features li{font-size:0.85rem;padding:0.28rem 0;color:#333}
+.price-features li{font-size:0.85rem;padding:0.28rem 0;color:#ddd}
 .price-features li::before{content:"✓ ";color:var(--green);font-weight:700}
 .price-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:0.7rem;font-family:var(--font-body);font-size:0.92rem;font-weight:500;cursor:pointer;transition:opacity 0.2s}
 .price-btn:hover{opacity:0.85}
@@ -275,7 +374,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .optimizer{max-width:800px;margin:0 auto;padding:2rem 2rem}
 .optimizer h2{font-family:var(--font-head);font-size:1.7rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:0.3rem}
 .sub{font-size:0.92rem;color:var(--muted);margin-bottom:1.8rem}
-.credits-bar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:0.65rem 1rem;margin-bottom:1.4rem;font-size:0.88rem}
+.credits-bar{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.65rem 1rem;margin-bottom:1.4rem;font-size:0.88rem}
 .credit-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex-shrink:0}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
 @media(max-width:600px){.form-row{grid-template-columns:1fr}}
@@ -287,7 +386,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .run-btn:hover:not(:disabled){opacity:0.88}
 .run-btn:disabled{opacity:0.5;cursor:not-allowed}
 .result-area{margin-top:1.8rem;border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#fff}
-.result-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.3rem;border-bottom:1px solid var(--border);background:#fafaf8}
+.result-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.3rem;border-bottom:1px solid var(--border);background:var(--card2)}
 .result-header h3{font-family:var(--font-head);font-size:0.95rem;font-weight:700}
 .score-pill{background:var(--accent);color:var(--accent2);font-family:var(--font-head);font-size:0.82rem;font-weight:800;padding:4px 13px;border-radius:20px}
 .result-tabs{display:flex;border-bottom:1px solid var(--border)}
@@ -295,13 +394,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-content{display:none;padding:1.3rem}
 .tab-content.active{display:block}
-.tab-content pre{white-space:pre-wrap;font-family:var(--font-body);font-size:0.88rem;line-height:1.7;color:#222}
+.tab-content pre{white-space:pre-wrap;font-family:var(--font-body);font-size:0.88rem;line-height:1.7;color:#ddd}
 
 /* LOGIN SCREEN */
 .login-wrap{max-width:420px;margin:5rem auto;padding:2rem;text-align:center}
 .login-wrap h2{font-family:var(--font-head);font-size:2rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:0.6rem}
 .login-wrap p{color:var(--muted);font-size:0.95rem;margin-bottom:2.5rem;line-height:1.6}
-.login-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.login-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
 .divider{width:100%;border-top:1px solid var(--border);margin:0.5rem 0}
 
 /* MODAL */
@@ -337,24 +436,15 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
 <body>
 
 <nav>
-  <div class="logo"><span>L</span>inkedIn Optimizer</div>
+  <div class="logo">
+    <img src="https://linkedinoptimizer.co.in/logo.png" alt="LinkedIn Optimizer" onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'"/>
+    <span id="logo-text" style="display:none">LO</span>
+  </div>
   <div class="nav-right" id="nav-right">
     <button class="btn btn-outline" onclick="showScreen('login')">Sign In</button>
     <button class="btn btn-dark" onclick="openPayModal()">Buy Credits</button>
   </div>
 </nav>
-
-<!-- GOOGLE ADSENSE — Header Banner Ad -->
-<div style="max-width:880px;margin:0.5rem auto;padding:0 1rem;text-align:center">
-  <div style="font-size:0.68rem;color:#bbb;text-align:right;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.5px">Advertisement</div>
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-8400475474079471"
-       data-ad-slot="6304622696"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
 
 <!-- LOGIN SCREEN -->
 <div id="screen-login" class="screen">
@@ -413,7 +503,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem">
       <article style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem">
         <div style="color:#f5a623;font-size:0.88rem;margin-bottom:0.8rem">★★★★★</div>
-        <p style="font-size:0.88rem;color:#333;line-height:1.65;margin-bottom:1rem">"My ATS score went from 38 to 84 in one click. Got a call from Accenture within a week. A total game-changer for Indian job seekers."</p>
+        <p style="font-size:0.88rem;color:#ddd;line-height:1.65;margin-bottom:1rem">"My ATS score went from 38 to 84 in one click. Got a call from Accenture within a week. A total game-changer for Indian job seekers."</p>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;font-family:var(--font-head)">PS</div>
           <div><div style="font-weight:500;font-size:0.85rem">Priya S.</div><div style="font-size:0.76rem;color:var(--muted)">Software Engineer, Bengaluru</div></div>
@@ -421,7 +511,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
       </article>
       <article style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem">
         <div style="color:#f5a623;font-size:0.88rem;margin-bottom:0.8rem">★★★★★</div>
-        <p style="font-size:0.88rem;color:#333;line-height:1.65;margin-bottom:1rem">"Applied to 50 jobs with my old resume — zero calls. After ResumeAI I got 4 interview calls in 2 weeks. The ATS score shows exactly what's missing."</p>
+        <p style="font-size:0.88rem;color:#ddd;line-height:1.65;margin-bottom:1rem">"Applied to 50 jobs with my old resume — zero calls. After ResumeAI I got 4 interview calls in 2 weeks. The ATS score shows exactly what's missing."</p>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:32px;height:32px;border-radius:50%;background:#185fa5;color:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;font-family:var(--font-head)">RM</div>
           <div><div style="font-weight:500;font-size:0.85rem">Rahul M.</div><div style="font-size:0.76rem;color:var(--muted)">MBA Graduate, Mumbai</div></div>
@@ -429,7 +519,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
       </article>
       <article style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem">
         <div style="color:#f5a623;font-size:0.88rem;margin-bottom:0.8rem">★★★★★</div>
-        <p style="font-size:0.88rem;color:#333;line-height:1.65;margin-bottom:1rem">"As a B.Tech fresher my resume was always rejected. ResumeAI helped me reframe projects in a way that passes ATS. Landed my first startup job!"</p>
+        <p style="font-size:0.88rem;color:#ddd;line-height:1.65;margin-bottom:1rem">"As a B.Tech fresher my resume was always rejected. ResumeAI helped me reframe projects in a way that passes ATS. Landed my first startup job!"</p>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:32px;height:32px;border-radius:50%;background:#3a6e00;color:#f0ffd6;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;font-family:var(--font-head)">AK</div>
           <div><div style="font-weight:500;font-size:0.85rem">Ananya K.</div><div style="font-size:0.76rem;color:var(--muted)">B.Tech Fresher, Hyderabad</div></div>
@@ -450,7 +540,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
   </div>
 
   <!-- AFFILIATE PRODUCTS SECTION -->
-  <section class="section" aria-labelledby="affiliate-head" style="background:#fff;padding-top:3rem;padding-bottom:3rem">
+  <section class="section" aria-labelledby="affiliate-head" style="background:var(--card);padding-top:3rem;padding-bottom:3rem">
     <div class="section-label">Recommended for you</div>
     <h2 id="affiliate-head" style="margin-bottom:0.5rem">Top tools &amp; courses for job seekers</h2>
     <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem">Handpicked resources to help you land your dream job faster.</p>
@@ -462,7 +552,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
           <div style="font-size:1.6rem;margin-bottom:0.7rem">🎓</div>
           <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.3rem">Online Courses</div>
           <div style="font-family:var(--font-head);font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;color:var(--text)">Coursera</div>
-          <div style="font-size:0.83rem;color:#555;line-height:1.55;margin-bottom:0.9rem">Get certified in top skills — Data Science, AI, MBA, and more. Trusted by 1M+ Indian learners.</div>
+          <div style="font-size:0.83rem;color:#aaa;line-height:1.55;margin-bottom:0.9rem">Get certified in top skills — Data Science, AI, MBA, and more. Trusted by 1M+ Indian learners.</div>
           <div style="background:var(--accent);color:#fff;border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:500;display:inline-block">Explore Free Courses →</div>
         </div>
       </a>
@@ -473,7 +563,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
           <div style="font-size:1.6rem;margin-bottom:0.7rem">✍️</div>
           <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.3rem">Writing Tool</div>
           <div style="font-family:var(--font-head);font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;color:var(--text)">Grammarly Premium</div>
-          <div style="font-size:0.83rem;color:#555;line-height:1.55;margin-bottom:0.9rem">Write error-free emails, cover letters and LinkedIn messages. Essential for job applications.</div>
+          <div style="font-size:0.83rem;color:#aaa;line-height:1.55;margin-bottom:0.9rem">Write error-free emails, cover letters and LinkedIn messages. Essential for job applications.</div>
           <div style="background:var(--accent);color:#fff;border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:500;display:inline-block">Try Free →</div>
         </div>
       </a>
@@ -484,7 +574,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
           <div style="font-size:1.6rem;margin-bottom:0.7rem">🚀</div>
           <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.3rem">Career Upskilling</div>
           <div style="font-family:var(--font-head);font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;color:var(--text)">upGrad India</div>
-          <div style="font-size:0.83rem;color:#555;line-height:1.55;margin-bottom:0.9rem">India's #1 online learning platform. MBA, Data Science, Software Engineering programs with placement support.</div>
+          <div style="font-size:0.83rem;color:#aaa;line-height:1.55;margin-bottom:0.9rem">India's #1 online learning platform. MBA, Data Science, Software Engineering programs with placement support.</div>
           <div style="background:var(--accent);color:#fff;border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:500;display:inline-block">Get Free Counselling →</div>
         </div>
       </a>
@@ -495,7 +585,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
           <div style="font-size:1.6rem;margin-bottom:0.7rem">🎨</div>
           <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.3rem">Resume Design</div>
           <div style="font-family:var(--font-head);font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;color:var(--text)">Canva Pro</div>
-          <div style="font-size:0.83rem;color:#555;line-height:1.55;margin-bottom:0.9rem">Beautiful ATS-friendly resume templates. Design a professional resume in minutes — no designer needed.</div>
+          <div style="font-size:0.83rem;color:#aaa;line-height:1.55;margin-bottom:0.9rem">Beautiful ATS-friendly resume templates. Design a professional resume in minutes — no designer needed.</div>
           <div style="background:var(--accent);color:#fff;border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:500;display:inline-block">Try Free →</div>
         </div>
       </a>
@@ -540,41 +630,53 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
     <div style="display:grid;gap:0.7rem;max-width:720px">
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">What is an ATS and why does my resume need to pass it?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">ATS stands for Applicant Tracking System — software used by 98% of Fortune 500 companies and most Indian MNCs to automatically screen resumes before a human ever reads them. If your resume isn't keyword-optimized for the specific job, it gets rejected automatically. ResumeAI rewrites your resume to pass ATS filters for any job description.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">ATS stands for Applicant Tracking System — software used by 98% of Fortune 500 companies and most Indian MNCs to automatically screen resumes before a human ever reads them. If your resume isn't keyword-optimized for the specific job, it gets rejected automatically. ResumeAI rewrites your resume to pass ATS filters for any job description.</p>
       </details>
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">Is ResumeAI free to use?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">Yes! ResumeAI gives you 1 free optimization when you sign up. After that, credits start at just ₹99 for 5 optimizations. There are no subscriptions — buy credits only when you need them.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">Yes! ResumeAI gives you 1 free optimization when you sign up. After that, credits start at just ₹99 for 5 optimizations. There are no subscriptions — buy credits only when you need them.</p>
       </details>
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">How does the AI resume optimizer work?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">You paste your existing resume and the job description you're targeting. ResumeAI's AI analyzes job requirements, identifies missing keywords and skills, rewrites your resume to match the role, and gives you an ATS score from 0–100. The whole process takes under 45 seconds.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">You paste your existing resume and the job description you're targeting. ResumeAI's AI analyzes job requirements, identifies missing keywords and skills, rewrites your resume to match the role, and gives you an ATS score from 0–100. The whole process takes under 45 seconds.</p>
       </details>
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">Does ResumeAI work for Indian companies and MNCs?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">Yes. ResumeAI works for roles at Infosys, TCS, Wipro, HCL, Accenture, Google India, Amazon India, Flipkart, Zomato, and all other companies that use ATS systems.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">Yes. ResumeAI works for roles at Infosys, TCS, Wipro, HCL, Accenture, Google India, Amazon India, Flipkart, Zomato, and all other companies that use ATS systems.</p>
       </details>
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">Can I optimize my LinkedIn profile too?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">Yes! Every optimization includes a LinkedIn About section tailored to your target role. Copy-paste it into your LinkedIn profile to attract Indian recruiters searching for your skills.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">Yes! Every optimization includes a LinkedIn About section tailored to your target role. Copy-paste it into your LinkedIn profile to attract Indian recruiters searching for your skills.</p>
       </details>
       <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem">
         <summary style="font-weight:500;font-size:0.92rem;cursor:pointer">Is my resume data safe and private?</summary>
-        <p style="margin-top:0.7rem;font-size:0.86rem;color:#444;line-height:1.7">Absolutely. Your resume is processed securely and never stored permanently or shared with third parties. We use Firebase and industry-standard encryption.</p>
+        <p style="margin-top:0.7rem;font-size:0.86rem;color:#bbb;line-height:1.7">Absolutely. Your resume is processed securely and never stored permanently or shared with third parties. We use Firebase and industry-standard encryption.</p>
       </details>
     </div>
   </section>
 
-  <section style="background:var(--accent);padding:3.5rem 2rem;text-align:center">
-    <h2 style="font-family:var(--font-head);color:#fff;font-size:1.9rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:0.7rem">Ready to land more interviews?</h2>
-    <p style="color:rgba(255,255,255,0.7);margin-bottom:1.8rem;font-size:0.95rem">Join 10,000+ job seekers in India who've optimized their resumes with AI. Start free today.</p>
-    <button class="btn-primary" style="background:var(--accent2);color:var(--accent);font-size:1rem;padding:0.95rem 2.4rem" onclick="handleStartClick()">Optimize My Resume — It's Free</button>
+  <!-- ADSENSE — between FAQ and CTA, naturally placed -->
+  <div style="max-width:720px;margin:0 auto;padding:0 2rem 2rem">
+    <div style="font-size:0.62rem;color:#333;text-align:right;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:3px">Sponsored</div>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8400475474079471"
+         data-ad-slot="6304622696"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <section style="background:linear-gradient(135deg,#111 0%,#1a1400 50%,#111 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 2rem;text-align:center">
+    <h2 style="font-family:var(--font-head);color:var(--accent);font-size:1.4rem;font-weight:700;letter-spacing:3px;margin-bottom:0.7rem;text-transform:uppercase">Ready to land more interviews?</h2>
+    <p style="color:var(--muted);margin-bottom:1.8rem;font-size:0.95rem">Join 10,000+ job seekers who've optimized their resumes with AI. Start free today.</p>
+    <button class="btn-primary" style="font-size:1rem;padding:0.95rem 2.4rem" onclick="handleStartClick()">Optimize My Resume — It's Free</button>
   </section>
 
   <footer style="background:#111;color:rgba(255,255,255,0.6);padding:2.5rem 2rem">
     <div style="max-width:880px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;margin-bottom:2rem">
       <div>
-        <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:#fff;margin-bottom:0.7rem"><span style="background:var(--accent2);color:#111;padding:1px 6px;border-radius:4px;margin-right:3px">R</span>esumeAI</div>
+        <div style="font-family:var(--font-head);font-size:0.85rem;font-weight:700;color:var(--accent);margin-bottom:0.7rem;letter-spacing:2px">LINKEDIN OPTIMIZER</div>
         <p style="font-size:0.8rem;line-height:1.65">India's #1 LinkedIn profile optimizer and AI resume tool. Beat ATS filters, get more interviews.</p>
       </div>
       <div>
@@ -667,13 +769,25 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
         <button onclick="openPayModal()" style="background:transparent;color:var(--accent);border:1.5px solid var(--accent);border-radius:10px;padding:0.6rem 1.3rem;font-size:0.85rem;font-weight:500;cursor:pointer">Buy Credits</button>
       </div>
     </div>
+    <!-- ADSENSE — subtle in-content ad above recommendations -->
+    <div style="margin-top:2rem;margin-bottom:0.5rem">
+      <div style="font-size:0.62rem;color:#444;text-align:right;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:3px">Sponsored</div>
+      <ins class="adsbygoogle"
+           style="display:block;background:transparent"
+           data-ad-format="fluid"
+           data-ad-layout="in-article"
+           data-ad-client="ca-pub-8400475474079471"
+           data-ad-slot="7145067850"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <!-- AFFILIATE SECTION — below results -->
     <div style="margin-top:2rem">
       <div style="font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;font-weight:500;margin-bottom:0.8rem">Recommended for you</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem">
 
         <a href="https://www.coursera.org/?irclickid=YOUR_AFFILIATE_CODE" target="_blank" rel="noopener sponsored" style="text-decoration:none">
-          <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
             <span style="font-size:1.3rem">🎓</span>
             <div><div style="font-weight:500;font-size:0.88rem;color:var(--text)">Coursera</div><div style="font-size:0.78rem;color:var(--muted)">Get certified — boost your resume</div></div>
             <span style="margin-left:auto;font-size:0.78rem;color:var(--accent);font-weight:500">Free →</span>
@@ -681,7 +795,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
         </a>
 
         <a href="https://www.upgrad.com/?affiliate=YOUR_CODE" target="_blank" rel="noopener sponsored" style="text-decoration:none">
-          <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
             <span style="font-size:1.3rem">🚀</span>
             <div><div style="font-weight:500;font-size:0.88rem;color:var(--text)">upGrad</div><div style="font-size:0.78rem;color:var(--muted)">MBA &amp; tech courses with placement</div></div>
             <span style="margin-left:auto;font-size:0.78rem;color:var(--accent);font-weight:500">Explore →</span>
@@ -689,7 +803,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
         </a>
 
         <a href="https://www.grammarly.com/refer?AFFILIATE_CODE" target="_blank" rel="noopener sponsored" style="text-decoration:none">
-          <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;display:flex;align-items:center;gap:10px;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
             <span style="font-size:1.3rem">✍️</span>
             <div><div style="font-weight:500;font-size:0.88rem;color:var(--text)">Grammarly</div><div style="font-size:0.78rem;color:var(--muted)">Write perfect cover letters</div></div>
             <span style="margin-left:auto;font-size:0.78rem;color:var(--accent);font-weight:500">Try Free →</span>
