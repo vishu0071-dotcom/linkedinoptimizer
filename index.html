@@ -226,7 +226,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(245,195,0,0.4)}50%{opacity:0.5;box-shadow:0 0 0 6px rgba(245,195,0,0)}}
 .hero h1{font-family:var(--font-head);font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;letter-spacing:2px;margin-bottom:1.2rem;text-transform:uppercase}
-.hero h1 em{font-style:normal;color:var(--accent);text-shadow:var(--glow)}
+.hero h1 em{font-style:normal;color:#000;background:var(--accent);padding:2px 10px;border-radius:4px;text-shadow:none}
 .hero p{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto 2.5rem;line-height:1.7}
 .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .btn-primary{background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.9rem 2rem;font-family:var(--font-body);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s}
@@ -322,7 +322,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2
 
 /* LANDING */
 .hero{max-width:840px;margin:0 auto;padding:5rem 2rem 3rem;text-align:center}
-.hero-badge{display:inline-block;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-size:0.78rem;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:1.5rem}
+
 .hero h1{font-family:var(--font-head);font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.08;letter-spacing:-1.5px;margin-bottom:1.2rem}
 .hero h1 em{font-style:normal;background:var(--accent2);padding:0 6px;border-radius:4px}
 .hero p{font-size:1.05rem;color:var(--muted);max-width:500px;margin:0 auto 2.5rem;line-height:1.65}
@@ -437,8 +437,11 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
 
 <nav>
   <div class="logo">
-    <img src="https://linkedinoptimizer.co.in/logo.png" alt="LinkedIn Optimizer" onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'"/>
-    <span id="logo-text" style="display:none">LO</span>
+    <img src="logo.png" alt="LinkedIn Optimizer" style="height:48px;width:auto" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+    <div id="logo-fallback" style="display:none;align-items:center;gap:6px">
+      <div style="background:var(--accent);color:#000;font-family:var(--font-head);font-weight:900;font-size:1.2rem;padding:4px 10px;border-radius:6px;letter-spacing:1px">LO</div>
+      <span style="font-family:var(--font-head);font-weight:700;font-size:0.85rem;letter-spacing:1.5px;color:var(--accent)">LINKEDIN OPTIMIZER</span>
+    </div>
   </div>
   <div class="nav-right" id="nav-right">
     <button class="btn btn-outline" onclick="showScreen('login')">Sign In</button>
@@ -465,20 +468,160 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
 
 <!-- LANDING -->
 <main id="screen-landing" class="screen active">
-  <section class="hero" aria-label="Hero">
-    <div class="hero-badge">India's #1 LinkedIn &amp; AI Resume Optimizer · Trusted by 10,000+ job seekers</div>
-    <h1>Free AI Resume Optimizer —<br/>Beat <em>ATS Filters</em> in 45 Seconds</h1>
-    <p>India's smartest ATS resume checker. Paste your resume + job description and get an AI-optimized resume, ATS score out of 100, and LinkedIn summary instantly. Trusted by freshers, MBA graduates &amp; senior professionals.</p>
-    <div class="hero-cta">
-      <button class="btn-primary" onclick="handleStartClick()">Optimize My Resume — Free</button>
-      <button class="btn-secondary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">See Pricing ↓</button>
+
+  <!-- AI Grid Background -->
+  <div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(245,195,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,195,0,0.03) 1px,transparent 1px);background-size:50px 50px"></div>
+    <div style="position:absolute;top:20%;left:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(245,195,0,0.04) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:30%;right:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(245,195,0,0.03) 0%,transparent 70%);pointer-events:none"></div>
+  </div>
+
+  <div style="position:relative;z-index:1">
+  <section class="hero" aria-label="Hero" style="text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;max-width:1000px;padding:4rem 2rem 3rem">
+    <!-- Left — Text -->
+    <div>
+      <div class="hero-badge" style="margin-bottom:0.8rem">⚡ Powered by Claude AI · 10,000+ Resumes Optimized</div>
+      <div style="font-family:var(--font-head);font-size:0.62rem;letter-spacing:3px;color:var(--muted);margin-bottom:1rem;text-transform:uppercase">[ AI.RESUME.SYSTEM v2.0 · ONLINE ]</div>
+      <h1 style="text-align:left;font-size:clamp(1.5rem,3vw,2.4rem)">Free AI Resume<br/>Optimizer —<br/>Beat <em>ATS Filters</em><br/>in 45 Seconds</h1>
+      <p style="text-align:left;margin:1.2rem 0 2rem;max-width:420px">India's smartest ATS resume checker. Paste your resume + job description and get an AI-optimized resume, ATS score out of 100, and LinkedIn summary instantly.</p>
+      <div class="hero-cta" style="justify-content:flex-start">
+        <button class="btn-primary" onclick="handleStartClick()">Optimize My Resume — Free</button>
+        <button class="btn-secondary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">See Pricing ↓</button>
+      </div>
+      <div class="stats" style="margin:2rem 0 0;max-width:420px">
+        <div class="stat"><div class="stat-num">92%</div><div class="stat-label">ATS pass rate</div></div>
+        <div class="stat"><div class="stat-num">3x</div><div class="stat-label">More interviews</div></div>
+        <div class="stat"><div class="stat-num">45s</div><div class="stat-label">Avg. time</div></div>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-num">92%</div><div class="stat-label">ATS pass rate</div></div>
-      <div class="stat"><div class="stat-num">3x</div><div class="stat-label">More interviews</div></div>
-      <div class="stat"><div class="stat-num">45s</div><div class="stat-label">Avg. optimization time</div></div>
+
+    <!-- Right — Animated AI Robot SVG -->
+    <div style="display:flex;justify-content:center;align-items:center">
+      <svg viewBox="0 0 280 340" width="280" height="340" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 30px rgba(245,195,0,0.25))">
+        <!-- Glow rings -->
+        <circle cx="140" cy="180" r="120" fill="none" stroke="rgba(245,195,0,0.05)" stroke-width="1"/>
+        <circle cx="140" cy="180" r="100" fill="none" stroke="rgba(245,195,0,0.07)" stroke-width="1"/>
+
+        <!-- Robot Body -->
+        <rect x="85" y="160" width="110" height="110" rx="12" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <!-- Body details -->
+        <rect x="100" y="178" width="28" height="18" rx="4" fill="#0a0a0a" stroke="#f5c300" stroke-width="1"/>
+        <rect x="152" y="178" width="28" height="18" rx="4" fill="#0a0a0a" stroke="#f5c300" stroke-width="1"/>
+        <!-- Chest screen -->
+        <rect x="105" y="208" width="70" height="40" rx="6" fill="#0d0d0d" stroke="rgba(245,195,0,0.4)" stroke-width="1"/>
+        <!-- Screen content - animated lines -->
+        <rect x="111" y="215" width="45" height="2" rx="1" fill="#f5c300" opacity="0.8">
+          <animate attributeName="width" values="45;20;45;35;45" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="111" y="221" width="35" height="2" rx="1" fill="#f5c300" opacity="0.6">
+          <animate attributeName="width" values="35;45;25;45;35" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="111" y="227" width="50" height="2" rx="1" fill="#f5c300" opacity="0.4">
+          <animate attributeName="width" values="50;30;50;20;50" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="111" y="233" width="28" height="2" rx="1" fill="#00ff88" opacity="0.7">
+          <animate attributeName="width" values="28;50;28;40;28" dur="2.5s" repeatCount="indefinite"/>
+        </rect>
+        <!-- ATS score indicator -->
+        <text x="140" y="244" font-family="monospace" font-size="7" fill="#00ff88" text-anchor="middle">ATS: 94/100 ✓</text>
+
+        <!-- Robot Head -->
+        <rect x="95" y="90" width="90" height="70" rx="14" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <!-- Eyes -->
+        <rect x="108" y="108" width="24" height="16" rx="4" fill="#0a0a0a" stroke="#f5c300" stroke-width="1"/>
+        <rect x="148" y="108" width="24" height="16" rx="4" fill="#0a0a0a" stroke="#f5c300" stroke-width="1"/>
+        <!-- Eye pupils - animated -->
+        <circle cx="120" cy="116" r="5" fill="#f5c300">
+          <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="160" cy="116" r="5" fill="#f5c300">
+          <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Mouth / processor -->
+        <rect x="115" y="134" width="50" height="8" rx="3" fill="#0a0a0a" stroke="rgba(245,195,0,0.5)" stroke-width="1"/>
+        <rect x="118" y="137" width="8" height="2" rx="1" fill="#f5c300" opacity="0.8">
+          <animate attributeName="x" values="118;128;138;148;138;128;118" dur="1.5s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- Antenna -->
+        <line x1="140" y1="90" x2="140" y2="65" stroke="#f5c300" stroke-width="2"/>
+        <circle cx="140" cy="60" r="6" fill="#f5c300">
+          <animate attributeName="r" values="6;8;6" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Antenna glow -->
+        <circle cx="140" cy="60" r="12" fill="rgba(245,195,0,0.1)">
+          <animate attributeName="r" values="12;18;12" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Left Arm -->
+        <rect x="55" y="165" width="28" height="70" rx="10" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <!-- Left Hand holding resume -->
+        <rect x="40" y="220" width="40" height="50" rx="4" fill="#0f0f0f" stroke="rgba(245,195,0,0.6)" stroke-width="1">
+          <animateTransform attributeName="transform" type="rotate" values="0 60 245;-5 60 245;0 60 245;5 60 245;0 60 245" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <line x1="46" y1="232" x2="72" y2="232" stroke="#f5c300" stroke-width="1" opacity="0.6"/>
+        <line x1="46" y1="238" x2="72" y2="238" stroke="#f5c300" stroke-width="1" opacity="0.4"/>
+        <line x1="46" y1="244" x2="65" y2="244" stroke="#f5c300" stroke-width="1" opacity="0.4"/>
+        <line x1="46" y1="250" x2="70" y2="250" stroke="#f5c300" stroke-width="1" opacity="0.3"/>
+        <text x="59" y="263" font-family="monospace" font-size="5" fill="#888" text-anchor="middle">RESUME</text>
+
+        <!-- Right Arm -->
+        <rect x="197" y="165" width="28" height="70" rx="10" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <!-- Right Hand - pointing/typing -->
+        <rect x="200" y="225" width="34" height="8" rx="4" fill="#f5c300" opacity="0.8">
+          <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.8s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- Legs -->
+        <rect x="105" y="270" width="28" height="40" rx="8" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <rect x="147" y="270" width="28" height="40" rx="8" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <!-- Feet -->
+        <rect x="100" y="305" width="36" height="14" rx="6" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+        <rect x="144" y="305" width="36" height="14" rx="6" fill="#1a1a1a" stroke="#f5c300" stroke-width="1.5"/>
+
+        <!-- Floating data particles around robot -->
+        <circle cx="50" cy="130" r="3" fill="#f5c300" opacity="0.6">
+          <animate attributeName="cy" values="130;120;130" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="230" cy="140" r="2" fill="#00ff88" opacity="0.7">
+          <animate attributeName="cy" values="140;128;140" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="240" cy="200" r="3" fill="#f5c300" opacity="0.5">
+          <animate attributeName="cy" values="200;188;200" dur="1.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="45" cy="200" r="2" fill="#00ff88" opacity="0.5">
+          <animate attributeName="cy" values="200;212;200" dur="2.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Floating text labels -->
+        <g opacity="0.7">
+          <animate attributeName="opacity" values="0.7;0.3;0.7" dur="3s" repeatCount="indefinite"/>
+          <text x="220" y="165" font-family="monospace" font-size="6" fill="#f5c300">ATS✓</text>
+        </g>
+        <g opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.5s" repeatCount="indefinite"/>
+          <text x="28" y="155" font-family="monospace" font-size="6" fill="#00ff88">AI++</text>
+        </g>
+      </svg>
     </div>
   </section>
+
+  <!-- Mobile: hide robot on small screens -->
+  <style>
+    @media(max-width:700px){
+      .hero{grid-template-columns:1fr !important;text-align:center !important}
+      .hero>div:last-child{display:none}
+      .hero h1,.hero p{text-align:center !important}
+      .hero-cta{justify-content:center !important}
+      .stats{max-width:100% !important}
+    }
+  </style>
 
   <div style="background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.2rem 2rem;text-align:center">
     <p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.7rem;text-transform:uppercase;letter-spacing:0.8px">Optimized resumes have landed interviews at</p>
@@ -712,6 +855,7 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
       <span>linkedinoptimizer.net · linkedinanalyser.com · AI Resume &amp; LinkedIn Tool India</span>
     </div>
   </footer>
+  </div><!-- end z-index wrapper -->
 </main>
 
 <!-- OPTIMIZER SCREEN -->
