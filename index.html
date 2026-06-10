@@ -1099,17 +1099,25 @@ let userCredits = 0;
 let selectedPlan = 'starter';
 let isGuest = false;
 
-// Detect currency on load
-detectCurrency();
+// Initialize everything after page fully loads
+window.addEventListener('load', function() {
+  // Detect currency
+  detectCurrency();
 
-try {
-  app = firebase.initializeApp(FIREBASE_CONFIG);
-  auth = firebase.auth();
-  db = firebase.database(); // Realtime Database — works reliably in India
-  auth.onAuthStateChanged(handleAuthChange);
-} catch(e) {
-  console.warn('Firebase not configured yet:', e.message);
-}
+  // Initialize Firebase
+  try {
+    if (typeof firebase !== 'undefined') {
+      app = firebase.initializeApp(FIREBASE_CONFIG);
+      auth = firebase.auth();
+      db = firebase.database();
+      auth.onAuthStateChanged(handleAuthChange);
+    } else {
+      console.warn('Firebase SDK not loaded');
+    }
+  } catch(e) {
+    console.warn('Firebase init error:', e.message);
+  }
+});
 
 async function handleAuthChange(user) {
   if (user) {
