@@ -15,6 +15,11 @@
 <meta name="theme-color" content="#1a1a2e"/>
 <meta name="google-site-verification" content="rLPc8csyqjf299-h2i1Ewe0Hn2URBfghhHUhHsffRlQ"/>
 
+<!-- Firebase SDKs — loaded early in head -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
 <!-- ═══════════ GOOGLE ADSENSE ═══════════ -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8400475474079471" crossorigin="anonymous"></script>
 
@@ -206,7 +211,7 @@
 }
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh}
 
-nav{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 2rem;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.97);backdrop-filter:blur(10px);position:sticky;top:0;z-index:99999}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0.4rem 2rem;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.97);backdrop-filter:blur(10px);position:sticky;top:0;z-index:99999;min-height:90px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo img{height:36px;width:auto}
 .logo span{color:var(--accent);font-family:var(--font-head);font-weight:700;font-size:1rem;letter-spacing:1px}
@@ -437,12 +442,12 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
 
 <nav>
   <div class="logo">
-    <img src="logo.png" alt="LinkedIn Optimizer" style="height:72px;width:auto;display:block" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+    <img src="logo.png" alt="LinkedIn Optimizer" style="height:80px;width:auto;display:block;object-fit:contain" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
     <div id="logo-fallback" style="display:none;align-items:center;gap:10px">
-      <div style="background:var(--accent);color:#000;font-family:var(--font-head);font-weight:900;font-size:1.8rem;padding:8px 14px;border-radius:8px;letter-spacing:2px;line-height:1">LO</div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <span style="font-family:var(--font-head);font-weight:700;font-size:1rem;letter-spacing:2px;color:#fff;line-height:1">LINKEDIN<span style="color:var(--accent)">OPTIMIZER</span></span>
-        <span style="font-family:var(--font-head);font-size:0.6rem;letter-spacing:3px;color:var(--muted)">.CO.IN</span>
+      <div style="background:var(--accent);color:#000;font-family:var(--font-head);font-weight:900;font-size:2rem;padding:8px 14px;border-radius:8px;letter-spacing:2px;line-height:1">LO</div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <span style="font-family:var(--font-head);font-weight:700;font-size:1.1rem;letter-spacing:2px;color:#fff;line-height:1">LINKEDIN<span style="color:var(--accent)">OPTIMIZER</span></span>
+        <span style="font-family:var(--font-head);font-size:0.62rem;letter-spacing:3px;color:var(--muted)">.CO.IN</span>
       </div>
     </div>
   </div>
@@ -990,9 +995,6 @@ footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-si
 <div class="toast" id="toast"></div>
 
 <!-- Firebase + Google Auth SDKs — Using Realtime Database (works better in India) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
@@ -1035,10 +1037,10 @@ let PLANS = PLANS_INR; // default to INR
 // Detect user location and set currency
 async function detectCurrency() {
   try {
-    const res = await fetch('https://ipapi.co/json/');
-    const data = await res.json();
-    userCountry = data.country_code || 'IN';
-    if (userCountry !== 'IN') {
+    const res = await fetch('https://ipapi.co/country/', {signal: AbortSignal.timeout(3000)});
+    const country = (await res.text()).trim();
+    userCountry = country;
+    if (country && country !== 'IN') {
       userCurrency = 'USD';
       PLANS = PLANS_USD;
     } else {
@@ -1048,7 +1050,9 @@ async function detectCurrency() {
     updatePricingDisplay();
     updatePayModal();
   } catch(e) {
-    console.log('Currency detection failed, using INR');
+    console.log('Currency detection failed, using INR default');
+    userCurrency = 'INR';
+    PLANS = PLANS_INR;
   }
 }
 
